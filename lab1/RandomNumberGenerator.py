@@ -32,9 +32,13 @@ def main():
     tasks = range(1, task_number + 1)
     rj = []
     pj = []
+    pi = []
+    Sj = []
+    Cj = []
 
     for _ in tasks:
         pj.append(generator.nextInt(1, 29))
+        pi.append(_)
 
     sum = 0
 
@@ -44,12 +48,21 @@ def main():
     for _ in tasks:
         rj.append(generator.nextInt(1, sum))
 
-    print("Rj: {} \nPj: {}".format(rj, pj))
+    print("pi: {} \nRj: {} \nPj: {}".format(pi, rj, pj))
+
+    Sj.append(max(rj[0], 0))
+    Cj.append(Sj[0]+pj[0])
+    for _ in tasks[:-1]:
+        Sj.append(max(rj[_], Cj[_-1]))
+        Cj.append(Sj[_]+pj[_])
+
+    print("\npi: {} \nS: {} \nC: {}".format(pi, Sj, Cj))
 
     rj.sort()
     pj.sort()
 
     print("\nSorted\nRj: {} \nPj: {}".format(rj, pj))
+
 
 if __name__ == "__main__":
     main()
