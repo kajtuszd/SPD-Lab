@@ -25,6 +25,11 @@ class RandomNumberGenerator:
         return val
 
 
+
+
+
+
+
 def main():
     seed = int(input("Enter Z number: "))
     generator = RandomNumberGenerator(seed)
