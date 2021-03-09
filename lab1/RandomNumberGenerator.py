@@ -24,6 +24,15 @@ class RandomNumberGenerator:
         val = self.nextInt(low, high) / 100000.0
         return val
 
+def fun1(rj, pj, tasks):
+    Sj = []
+    Cj = []
+    Sj.append(max(rj[0], 0))
+    Cj.append(Sj[0]+pj[0])
+    for _ in tasks[:-1]:
+        Sj.append(max(rj[_], Cj[_-1]))
+        Cj.append(Sj[_]+pj[_])
+    return [Sj, Cj]
 
 def main():
     seed = int(input("Enter Z number: "))
@@ -33,8 +42,7 @@ def main():
     rj = []
     pj = []
     pi = []
-    Sj = []
-    Cj = []
+    Tab=[]
 
     for _ in tasks:
         pj.append(generator.nextInt(1, 29))
@@ -48,20 +56,18 @@ def main():
     for _ in tasks:
         rj.append(generator.nextInt(1, sum))
 
-    print("pi: {} \nRj: {} \nPj: {}".format(pi, rj, pj))
+    print("\nnr: {} \nRj: {} \nPj: {}".format(pi, rj, pj))
 
-    Sj.append(max(rj[0], 0))
-    Cj.append(Sj[0]+pj[0])
-    for _ in tasks[:-1]:
-        Sj.append(max(rj[_], Cj[_-1]))
-        Cj.append(Sj[_]+pj[_])
+    [Sj, Cj] = fun1(rj, pj, tasks)
 
     print("\npi: {} \nS: {} \nC: {}".format(pi, Sj, Cj))
 
-    rj.sort()
-    pj.sort()
+    for _ in tasks:
+        Tab.append([pi[_-1], rj[_-1], pj[_-1]])
+    Tab.sort(key=lambda x: (x[1]))
+    [Sj, Cj] = fun1([row[1] for row in Tab], [row[2] for row in Tab], tasks)
 
-    print("\nSorted\nRj: {} \nPj: {}".format(rj, pj))
+    print("\npi: {} \nS: {} \nC: {}".format([row[0] for row in Tab], Sj, Cj))
 
 
 if __name__ == "__main__":
