@@ -2,8 +2,10 @@ import math
 
 
 class RandomNumberGenerator:
+
     def __init__(self, seedValue=None):
         self.__seed = seedValue
+
 
     def nextInt(self, low, high):
         m = 2147483647
@@ -18,21 +20,24 @@ class RandomNumberGenerator:
         value_0_1 = value_0_1 / m
         return low + int(math.floor(value_0_1 * (high - low + 1)))
 
+
     def nextFloat(self, low, high):
         low *= 100000
         high *= 100000
         val = self.nextInt(low, high) / 100000.0
         return val
 
+
 def fun1(rj, pj, tasks):
     Sj = []
     Cj = []
     Sj.append(max(rj[0], 0))
     Cj.append(Sj[0]+pj[0])
-    for _ in tasks[:-1]:
-        Sj.append(max(rj[_], Cj[_-1]))
-        Cj.append(Sj[_]+pj[_])
+    for task in tasks[:-1]:
+        Sj.append(max(rj[task], Cj[task-1]))
+        Cj.append(Sj[task] + pj[task])
     return [Sj, Cj]
+
 
 def main():
     seed = int(input("Enter Z number: "))
@@ -42,11 +47,11 @@ def main():
     rj = []
     pj = []
     pi = []
-    Tab=[]
+    Tab = []
 
-    for _ in tasks:
+    for task in tasks:
         pj.append(generator.nextInt(1, 29))
-        pi.append(_)
+        pi.append(task)
 
     sum = 0
 
@@ -57,16 +62,14 @@ def main():
         rj.append(generator.nextInt(1, sum))
 
     print("\nnr: {} \nRj: {} \nPj: {}".format(pi, rj, pj))
-
     [Sj, Cj] = fun1(rj, pj, tasks)
-
     print("\npi: {} \nS: {} \nC: {}".format(pi, Sj, Cj))
 
-    for _ in tasks:
-        Tab.append([pi[_-1], rj[_-1], pj[_-1]])
+    for task in tasks:
+        Tab.append([pi[task-1], rj[task-1], pj[task-1]])
+
     Tab.sort(key=lambda x: (x[1]))
     [Sj, Cj] = fun1([row[1] for row in Tab], [row[2] for row in Tab], tasks)
-
     print("\npi: {} \nS: {} \nC: {}".format([row[0] for row in Tab], Sj, Cj))
 
 
