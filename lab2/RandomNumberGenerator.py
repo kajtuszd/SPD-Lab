@@ -28,16 +28,16 @@ class RandomNumberGenerator:
         return val
 
 
-def calculate(rj, pj, tasks):
+def calculate(rj, pj, qj, tasks):
     Sj = []
     Cj = []
     Sj.append(max(rj[0], 0))
     Cj.append(Sj[0]+pj[0])
-    Cmax = Cj[0]
+    Cmax = Cj[0] + qj[0]
     for task in tasks[:-1]:
         Sj.append(max(rj[task], Cj[task-1]))
         Cj.append(Sj[task] + pj[task])
-        Cmax = max(Cmax, Cj[task])
+        Cmax = max(Cmax, Cj[task] + qj[task])
     return [[Sj, Cj], Cmax]
 
 
@@ -48,6 +48,7 @@ def main():
     tasks = range(1, task_number + 1)
     rj = []
     pj = []
+    qj = []
     pi = []
     Tab = []
 
@@ -63,17 +64,22 @@ def main():
     for _ in tasks:
         rj.append(generator.nextInt(1, sum))
 
-    print("\nnr: {} \nRj: {} \nPj: {}".format(pi, rj, pj))
-    [[Sj, Cj], Cmax] = calculate(rj, pj, tasks)
+    X = 29 # test
+#   X = A # not test
+    for _ in tasks:
+        qj.append(generator.nextInt(1, X))
+    
+    print("\nnr: {} \nRj: {} \nPj: {} \nQj: {}".format(pi, rj, pj, qj))
+    [[Sj, Cj], Cmax] = calculate(rj, pj, qj, tasks)
     print("\npi: {} \nS: {} \nC: {}".format(pi, Sj, Cj))
 
     for task in tasks:
-        Tab.append([pi[task-1], rj[task-1], pj[task-1]])
-
+        Tab.append([pi[task-1], rj[task-1], pj[task-1], qj[task-1]])
     Tab.sort(key=lambda x: (x[1]))
-    [[Sj, Cj], Cmax] = calculate([row[1] for row in Tab], [row[2] for row in Tab], tasks)
-    print("\npi: {} \nS: {} \nC: {}".format([row[0] for row in Tab], Sj, Cj))
 
+    [[Sj, Cj], Cmax] = calculate([row[1] for row in Tab], [row[2] for row in Tab], [row[3] for row in Tab], tasks)
+    print("\npi: {} \nS: {} \nC: {}".format([row[0] for row in Tab], Sj, Cj))
+    print("\nCmax: {}".format(Cmax))
 
 if __name__ == "__main__":
     main()
