@@ -41,6 +41,28 @@ def calculate(rj, pj, qj, tasks):
     return [[Sj, Cj], Cmax]
 
 
+def Schrage(tasks, rj, pj, qj):
+    k = 1
+    G = []
+    tasks = list(tasks)
+    N = tasks
+    t = min(rj)
+    while (len(G)) or (len(N)):
+        while (len(N)) and (min(rj) <= t):
+            j_ = rj.index(min(rj)) +1
+            print(j_)
+            G.append(j_)
+            N.remove(j_)
+        if len(G):
+            j_ = rj.index(max(qj)) +1
+            G.remove(j_) 
+            tasks[k] = j_
+            t += p[j_]
+            k += 1
+        else:
+            t = min(rj)
+    return tasks
+
 def main():
     seed = int(input("Enter Z number: "))
     generator = RandomNumberGenerator(seed)
@@ -65,7 +87,7 @@ def main():
         rj.append(generator.nextInt(1, sum))
 
     X = 29 # test
-#   X = A # not test
+#    X = sum # not test
     for _ in tasks:
         qj.append(generator.nextInt(1, X))
     
@@ -75,10 +97,12 @@ def main():
 
     for task in tasks:
         Tab.append([pi[task-1], rj[task-1], pj[task-1], qj[task-1]])
-    Tab.sort(key=lambda x: (x[1]))
+    #Tab.sort(key=lambda x: (x[1]))
+
+    tasks = Schrage(tasks, rj, pj, qj)
 
     [[Sj, Cj], Cmax] = calculate([row[1] for row in Tab], [row[2] for row in Tab], [row[3] for row in Tab], tasks)
-    print("\npi: {} \nS: {} \nC: {}".format([row[0] for row in Tab], Sj, Cj))
+    print("\npi: {} \nS: {} \nC: {}".format(tasks, Sj, Cj))
     print("\nCmax: {}".format(Cmax))
 
 if __name__ == "__main__":
