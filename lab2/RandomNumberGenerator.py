@@ -38,7 +38,7 @@ def calculate(rj, pj, tasks):
         Sj.append(max(rj[task], Cj[task-1]))
         Cj.append(Sj[task] + pj[task])
         Cmax = max(Cmax, Cj[task])
-    return [Sj, Cj, Cmax]
+    return [[Sj, Cj], Cmax]
 
 
 def main():
@@ -64,14 +64,14 @@ def main():
         rj.append(generator.nextInt(1, sum))
 
     print("\nnr: {} \nRj: {} \nPj: {}".format(pi, rj, pj))
-    [Sj, Cj, Cmax] = calculate(rj, pj, tasks)
+    [[Sj, Cj], Cmax] = calculate(rj, pj, tasks)
     print("\npi: {} \nS: {} \nC: {}".format(pi, Sj, Cj))
 
     for task in tasks:
         Tab.append([pi[task-1], rj[task-1], pj[task-1]])
 
     Tab.sort(key=lambda x: (x[1]))
-    [Sj, Cj, Cmax] = calculate([row[1] for row in Tab], [row[2] for row in Tab], tasks)
+    [[Sj, Cj], Cmax] = calculate([row[1] for row in Tab], [row[2] for row in Tab], tasks)
     print("\npi: {} \nS: {} \nC: {}".format([row[0] for row in Tab], Sj, Cj))
 
 
